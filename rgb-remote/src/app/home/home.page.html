@@ -1,7 +1,8 @@
 
 <ion-content [fullscreen]="true">
-
+ 
   <div id="container">
+     <app-devices *ngIf="toggle" [devices]="devicesList"></app-devices>
     <div class="color-picker">
       <div id="color-wheel"></div>
       <div class="manual-color-picker">
@@ -21,29 +22,41 @@
       </div>
     
   </div>
+
     <div class="controls">
-      <div class="main-controls">
-         <button>
-          set
-        </button>
-         <button >
-          <img src="assets/images/music.png" alt="">
-        </button>
-      </div>
+      <div>
+        <div class="main-controls">
+          <button (click)="sendRGB()">
+            set
+          </button>
+          <button >
+            <img src="assets/images/music.png" alt="">
+          </button>
+        </div>
 
-      <div class="on-off-wrapper">
-        <button class="on-off">
-          <img src="assets/images/power.png" alt="">
-        </button>
-      </div>
+        <div class="on-off-wrapper">
+          <button class="on-off" (click)="turnOffOn()">
+            <img src="assets/images/power.png" alt="" >
+          </button>
+        </div>
 
-      <div class="brightness-wrapper">
-         <button class="on-off" (click)="brightnessUp()">
-          <img src="assets/images/brightness-up.png" alt="" >
-        </button>
-         <button class="on-off" (click)="brightnessDown()">
-          <img src="assets/images/brightness-down.png" alt="">
-        </button>
+        <div class="brightness-wrapper">
+          <button class="on-off" (click)="brightnessUp()">
+            <img src="assets/images/brightness-up.png" alt="" >
+          </button>
+          <button class="on-off" (click)="brightnessDown()">
+            <img src="assets/images/brightness-down.png" alt="">
+          </button>
+        </div>
+       
+      </div>
+      <div class="bluetooth-wrapper">
+         <button class="bluetooth" (click)="scan()">
+          <img src="assets/images/bluetooth.png" alt="">
+          </button>
+          <button class="bluetooth" *ngIf="selectedDevice" (click)="disconnect()">
+            <img src="assets/images/disconnect.png" alt="">
+          </button>
       </div>
       <!-- <button>
           <h1>ON</h1>

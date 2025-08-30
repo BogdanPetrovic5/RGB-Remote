@@ -1,0 +1,17 @@
+<div class="container">
+  
+    <div class="title">
+        <h1>Available Devices</h1>
+        <img src="assets/images/close.png" (click)="close()">
+    </div>
+    <div class="list">
+        <ion-list *ngIf ="devices.length > 0">
+            <ng-container *ngFor="let device of devices" >
+                <ion-item *ngIf="device.name.trim() != '' " (click)="connect(device)">
+                    {{ device.name || device.deviceId}}
+                </ion-item>
+            </ng-container>
+           
+        </ion-list>
+    </div>
+</div>
