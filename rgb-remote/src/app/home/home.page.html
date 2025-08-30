@@ -1,0 +1,63 @@
+
+<ion-content [fullscreen]="true">
+
+  <div id="container">
+    <div class="color-picker">
+      <div id="color-wheel"></div>
+      <div class="manual-color-picker">
+        <div class="red">
+          <span>RED</span>
+          <input type="number" [(ngModel)]="red" max="255" min="0" (ngModelChange)="changeColor()">
+        </div>
+         <div class="green">
+          <span>GREEN</span>
+          <input type="number" [(ngModel)]="green" max="255" min="0" (ngModelChange)="changeColor()">
+        </div>
+         <div class="blue">
+          <span>BLUE</span>
+          <input type="number" [(ngModel)]="blue" max="255" min="0"(ngModelChange)="changeColor()">
+        </div>
+       
+      </div>
+    
+  </div>
+    <div class="controls">
+      <div class="main-controls">
+         <button>
+          set
+        </button>
+         <button >
+          <img src="assets/images/music.png" alt="">
+        </button>
+      </div>
+
+      <div class="on-off-wrapper">
+        <button class="on-off">
+          <img src="assets/images/power.png" alt="">
+        </button>
+      </div>
+
+      <div class="brightness-wrapper">
+         <button class="on-off" (click)="brightnessUp()">
+          <img src="assets/images/brightness-up.png" alt="" >
+        </button>
+         <button class="on-off" (click)="brightnessDown()">
+          <img src="assets/images/brightness-down.png" alt="">
+        </button>
+      </div>
+      <!-- <button>
+          <h1>ON</h1>
+      </button>
+      <button>
+          <h1>OFF</h1>
+      </button>
+      <button>
+          <h1>SET</h1>
+      </button>
+      <button class="bluetooth">
+        <img src="assets/images/bluetooth.png" alt="">
+      </button> -->
+    </div>
+  </div>
+  
+</ion-content>

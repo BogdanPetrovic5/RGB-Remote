@@ -1,0 +1,174 @@
+#container {
+  width: 100%;
+  height: 100%;
+ background-color: #252422;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .color-picker{
+    width: 90%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+    .manual-color-picker{
+      margin-top: 40px;
+      width: 80%;
+      height: 50px;
+      display: flex;
+      gap: 20px;
+      flex-direction: row;
+      .red, .green, .blue{
+        width: 33.33%;
+        height: 50px;
+        position: relative;
+        font-size: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family:"Orbitron", sans-serif;
+        span{
+          position: absolute;
+          font-size: 0.5em;
+          top: -20px;
+          color: white;
+          opacity: 0.8;
+          
+        }
+        input{
+          width: 100%;
+          height: 100%;
+          border-radius: 25px;
+          border: none;
+          outline: none;
+          text-indent: 5px;
+            box-shadow: 1px 1px 13px 1px rgba(0, 0, 0, 0.466);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        font-size: 0.6em;
+        }
+      }
+     
+    }
+ 
+  }
+  .controls{
+    height: 40%;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    .on-off-wrapper{
+      .on-off{
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        padding: 0;
+        img{
+          width: 60%;
+          height: 60%;
+        }
+      }
+    }
+    .main-controls{
+       display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      font-size: 25px;
+      button{
+        padding: 0;
+        width: 50px;
+        height: 50px;
+      }
+      button:nth-child(2){
+        border-top-left-radius: 0;
+         border-top-right-radius: 0;
+        img{
+           width:30px;
+          height:30px;
+         }
+      }
+       button:first-child{
+        border-bottom-left-radius: 0;
+         border-bottom-right-radius: 0;
+         font-family:"Orbitron", sans-serif;
+         font-size: 0.8em;
+         color: #ffffff;
+         img{
+           width:30px;
+          height:30px;
+         }
+      }
+    }
+    .brightness-wrapper{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      button{
+        padding: 0;
+        width: 50px;
+        height: 50px;
+      }
+      button:nth-child(2){
+        border-top-left-radius: 0;
+         border-top-right-radius: 0;
+         img{
+           width:30px;
+          height:30px;
+         }
+      }
+       button:first-child{
+        border-bottom-left-radius: 0;
+         border-bottom-right-radius: 0;
+          
+         img{
+           width:30px;
+          height:30px;
+         }
+      }
+    }
+    
+    button{
+      img{
+        width:25px;
+        height: 25px;
+      }
+      
+      height: 50px;
+      padding-left: 15px;
+      padding-right: 15px;
+      border-radius: 25px;
+      background: RGBA(151, 224, 255, 1);
+      font-size: 25px;
+      background: #403D39;
+      box-shadow: 1px 1px 13px 1px rgba(0, 0, 0, 0.466);
+      color: white;
+      h1{
+        font-size: 0.6em;
+        margin: 0;
+         font-family:"Orbitron", sans-serif;
+      }
+    }
+    .bluetooth{
+      padding: 0;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+      width: 50px;
+    }
+  }
+}
+

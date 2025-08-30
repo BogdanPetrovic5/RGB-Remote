@@ -1,0 +1,7 @@
+{
+  "name": "rgb-remote",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
