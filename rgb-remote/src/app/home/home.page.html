@@ -2,7 +2,8 @@
 <ion-content [fullscreen]="true">
  
   <div id="container">
-     <app-devices *ngIf="toggle" [devices]="devicesList"></app-devices>
+     <app-devices *ngIf="devicesTab" [devices]="devicesList"></app-devices>
+     <app-settings *ngIf="settingsTab"></app-settings>
     <div class="color-picker">
       <div id="color-wheel"></div>
       <div class="manual-color-picker">
@@ -24,13 +25,18 @@
   </div>
 
     <div class="controls">
+       <div class="speed">
+          <span>Effect speed</span>
+          <ion-range [pin]="true" [pinFormatter]="pinFormatter" min="1" max="100" step="1" [(ngModel)]="effectSpeed" (ionChange)="sendSpeed()"></ion-range>
+        </div>
       <div>
+       
         <div class="main-controls">
           <button (click)="sendRGB()">
             set
           </button>
-          <button >
-            <img src="assets/images/music.png" alt="">
+          <button (click)="openEffects()">
+            <img src="assets/images/rgb.png" alt="">
           </button>
         </div>
 

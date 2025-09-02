@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { DevicesModule } from '../devices/devices.module';
+import { SettingsModule } from "../settings/settings.module";
 
 
 
@@ -16,7 +17,8 @@ import { DevicesModule } from '../devices/devices.module';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    DevicesModule
+    DevicesModule,
+    SettingsModule
 ],
   
 })

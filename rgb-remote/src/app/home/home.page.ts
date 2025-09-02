@@ -6,6 +6,7 @@ import { App } from '@capacitor/app';
 import iro from '@jaames/iro';
 import { HomePageState } from '../services/states/home-page-state.service';
 import { Subject, takeUntil } from 'rxjs';
+import { Effects } from '../dto/interfaces/effets.interface';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -13,7 +14,12 @@ import { Subject, takeUntil } from 'rxjs';
   standalone: false,
 })
 export class HomePage implements AfterViewInit, OnInit{
-async disconnect() {
+sendSpeed() {
+throw new Error('Method not implemented.');
+}
+effectSpeed: any;
+
+  async disconnect() {
    if (!this.selectedDevice) return;
 
     
@@ -29,11 +35,14 @@ async disconnect() {
 
 
   color:any
-  toggle:boolean = false;
-    picker: any;
+  devicesTab:boolean = false;
+  settingsTab:boolean = false;
+  
+  picker: any;
   red: number = 255;
   green: number = 0;
   blue: number = 0;
+  public isMusicMode:boolean = false;
   public destroy$ = new Subject<void>();
   public scanedDevicesSub:any;
   public devicesList: any[] = [];
@@ -48,7 +57,12 @@ async disconnect() {
     this._homePageState.devicesListTab$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
-      next:response=>this.toggle = response
+      next:response=>this.devicesTab = response
+    })
+     this._homePageState.effectsTab$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next:response=>this.settingsTab = response
     })
     this._homePageState.selectedDevice$.pipe(
         takeUntil(this.destroy$)
@@ -56,38 +70,40 @@ async disconnect() {
       next:response=>{
         this.selectedDevice = response;
 
-          if (this.selectedDevice) {
-            
-            BleClient.connect(this.selectedDevice.deviceId)
-            .then(() => alert("Connected!"))
-            .catch(err => alert("Error: " + err));
-
-
-
+        if (this.selectedDevice) {
+          
+          BleClient.connect(this.selectedDevice.deviceId)
+          .then(() => alert("Connected!"))
+          .catch(err => alert("Error: " + err));
         }
       }
     })
-    App.addListener('appStateChange', async (state) => {
-      if (!state.isActive) { 
-        if (this.selectedDevice) {
-       
-     
-          BleClient.disconnect(this.selectedDevice.deviceId)
-            .then(() =>{
-              setTimeout(() => {
-                alert("Disconnected!")
-                   this._homePageState.setDevice(null);
-              }, 100);
-            })
-            .catch(err => {
-              setTimeout(() => alert(err), 100);
-            });;
-       
-        
-          
-        }
+
+    this._homePageState.selectedMod$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next:response=>{
+        this.setEffect(response);
       }
-    });
+    })
+
+      App.addListener('appStateChange', async (state) => {
+        if (state.isActive) {
+          const savedDeviceId = sessionStorage.getItem('selectedDeviceId');
+          if (savedDeviceId && !this.selectedDevice) {
+            const device = this.devicesList.find(d => d.deviceId === savedDeviceId);
+            if (device) {
+              this.selectedDevice = device;
+              try {
+                await BleClient.connect(device.deviceId);
+                console.log("Reconnected to BLE device");
+              } catch (err) {
+                console.error("Reconnect failed", err);
+              }
+            }
+          }
+        }
+      });
   }
 
 
@@ -105,7 +121,23 @@ async disconnect() {
       });
     });
   }
-
+  pinFormatter(value: number) {
+    return `${value}%`;
+  }
+  setEffect(command:number[]){
+    const data = new Uint8Array(command);
+    if(this.selectedDevice){
+      BleClient.write(
+        this.selectedDevice.deviceId,
+        '0000FFF0-0000-1000-8000-00805F9B34FB',
+        '0000FFF3-0000-1000-8000-00805F9B34FB',
+        new DataView(data.buffer)
+      ).catch(err => alert(err));
+    }
+  }
+  openEffects() {
+    this._homePageState.toggleEffectsTab(true);
+  }
   async scan(){
    try{
      await BleClient.initialize();
@@ -150,19 +182,29 @@ async disconnect() {
       0x00,
       0xef
     ]);
+    this.isMusicMode = false;
     if(this.selectedDevice){
-     
+      
       await BleClient.write(this.selectedDevice.deviceId, '0000FFF0-0000-1000-8000-00805F9B34FB', '0000FFF3-0000-1000-8000-00805F9B34FB', new DataView(data.buffer)).catch(err=>alert(err))
     }
     
   }
-  brightnessUp(){
-    this.picker.color.set({ r: this.red + 10, g: this.green + 10, b: this.blue + 10 });
+  brightnessUp() {
+    const hsv = this.picker.color.hsv;
+    const newV = Math.min(hsv.v + 10, 100); 
+    this.picker.color.set({ h: hsv.h, s: hsv.s, v: newV });
   }
-  brightnessDown(){
-    this.picker.color.set({ r: this.red - 10, g: this.green - 10, b: this.blue - 10 });
+
+  brightnessDown() {
+    const hsv = this.picker.color.hsv;
+    const newV = Math.max(hsv.v - 10, 0); 
+    this.picker.color.set({ h: hsv.h, s: hsv.s, v: newV });
+  }
+  settings(){
+    this._homePageState.toggleEffectsTab(true)
   }
   turnOffOn(){
+    this.isMusicMode = false;
     if(this.red > 0 || this.green > 0 || this.blue > 0){
       this.red = 0;
       this.green = 0;

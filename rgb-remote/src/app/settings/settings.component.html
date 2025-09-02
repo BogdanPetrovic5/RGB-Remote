@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="content">
+    <div class="title">
+      <h1>Mods</h1>
+       <img src="assets/images/close.png" (click)="close()">
+    </div>
+
+    <ion-list>
+      <ion-item *ngFor="let effect of effects" (click)="choose(effect)">
+          {{effect.name}}
+      </ion-item>
+    </ion-list>
+  </div>
+</div>

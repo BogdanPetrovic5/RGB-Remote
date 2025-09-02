@@ -1,7 +1,13 @@
 {
   "name": "rgb-remote",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {
+      "server": {
+      "hostname": "localhost",
+      "iosScheme": "https",
+      "androidScheme": "https"
+      }
+    }
   },
   "type": "angular"
 }
