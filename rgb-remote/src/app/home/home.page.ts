@@ -14,26 +14,8 @@ import { Effects } from '../dto/interfaces/effets.interface';
   standalone: false,
 })
 export class HomePage implements AfterViewInit, OnInit{
-sendSpeed() {
-throw new Error('Method not implemented.');
-}
-effectSpeed: any;
-
-  async disconnect() {
-   if (!this.selectedDevice) return;
-
-    
-
-    try {
-      await BleClient.disconnect(this.selectedDevice.deviceId);
-      this._homePageState.setDevice(null);
-      alert('Disconnected!');
-    } catch (err) {
-      alert(err);
-    }
-}
-
-
+ 
+  effectSpeed: any;
   color:any
   devicesTab:boolean = false;
   settingsTab:boolean = false;
@@ -47,6 +29,24 @@ effectSpeed: any;
   public scanedDevicesSub:any;
   public devicesList: any[] = [];
   public selectedDevice:any;
+  public effectCode:number[] = []
+  public effectBrightness = 100;
+  async disconnect() {
+   if (!this.selectedDevice) return;
+
+    
+
+    try {
+      await BleClient.disconnect(this.selectedDevice.deviceId);
+      this._homePageState.setDevice(null);
+      alert('Disconnected!');
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+
+
   constructor(
     private _ngZone:NgZone,
     private _homePageState:HomePageState,
@@ -83,7 +83,8 @@ effectSpeed: any;
       takeUntil(this.destroy$)
     ).subscribe({
       next:response=>{
-        this.setEffect(response);
+        this.effectCode = response;
+        this.setEffect(this.effectCode);
       }
     })
 
@@ -120,6 +121,24 @@ effectSpeed: any;
         this.blue = color.rgb.b;
       });
     });
+  }
+  anim(event:Event){
+    const btn = event.target as HTMLElement
+    btn.classList.add('clicked')
+    setTimeout(()=>{
+      btn.classList.remove('clicked')
+    }, 200)
+  }
+   sendSpeed() {
+    if(this.effectCode.length == 0) return;
+    if(this.selectedDevice == null) return;
+    const data = new Uint8Array([0x7e, 0x00, 0x02, this.effectSpeed, 0x00,0x00,0x00,0x00,0xef])
+    BleClient.write(
+      this.selectedDevice.deviceId,
+      '0000FFF0-0000-1000-8000-00805F9B34FB',
+      '0000FFF3-0000-1000-8000-00805F9B34FB',
+      new DataView(data.buffer)
+    ).catch(err => alert(err));
   }
   pinFormatter(value: number) {
     return `${value}%`;
@@ -174,6 +193,7 @@ effectSpeed: any;
   }
   
   async sendRGB() {
+    this.effectCode = [];
     const data = new Uint8Array([
       0x7e, 0x00, 0x05, 0x03,
       this.red,   
@@ -190,12 +210,40 @@ effectSpeed: any;
     
   }
   brightnessUp() {
+    if(this.effectCode.length != 0){
+      if(this.effectBrightness + 5 > 100) return;
+      this.effectBrightness += 5;
+
+      const data = new Uint8Array([0x7e, 0x00, 0x01, this.effectBrightness, 0x00,0x00,0x00,0x00,0xef])
+      BleClient.write(
+        this.selectedDevice.deviceId,
+        '0000FFF0-0000-1000-8000-00805F9B34FB',
+        '0000FFF3-0000-1000-8000-00805F9B34FB',
+        new DataView(data.buffer)
+      ).catch(err => alert(err));
+      return;
+    }
+
+
     const hsv = this.picker.color.hsv;
     const newV = Math.min(hsv.v + 10, 100); 
     this.picker.color.set({ h: hsv.h, s: hsv.s, v: newV });
   }
 
   brightnessDown() {
+    if(this.effectCode.length != 0){
+      if(this.effectBrightness - 5 <= 0) return;
+      this.effectBrightness -= 5;
+
+      const data = new Uint8Array([0x7e, 0x00, 0x01, this.effectBrightness, 0x00,0x00,0x00,0x00,0xef])
+      BleClient.write(
+        this.selectedDevice.deviceId,
+        '0000FFF0-0000-1000-8000-00805F9B34FB',
+        '0000FFF3-0000-1000-8000-00805F9B34FB',
+        new DataView(data.buffer)
+      ).catch(err => alert(err));
+      return;
+    }
     const hsv = this.picker.color.hsv;
     const newV = Math.max(hsv.v - 10, 0); 
     this.picker.color.set({ h: hsv.h, s: hsv.s, v: newV });
@@ -205,6 +253,7 @@ effectSpeed: any;
   }
   turnOffOn(){
     this.isMusicMode = false;
+    this.effectCode = [];
     if(this.red > 0 || this.green > 0 || this.blue > 0){
       this.red = 0;
       this.green = 0;

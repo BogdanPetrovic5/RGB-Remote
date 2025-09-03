@@ -32,35 +32,35 @@
       <div>
        
         <div class="main-controls">
-          <button (click)="sendRGB()">
+          <button (click)="sendRGB()" (click)="anim($event)">
             set
           </button>
-          <button (click)="openEffects()">
+          <button (click)="openEffects()" (click)="anim($event)">
             <img src="assets/images/rgb.png" alt="">
           </button>
         </div>
 
         <div class="on-off-wrapper">
-          <button class="on-off" (click)="turnOffOn()">
+          <button class="on-off" (click)="turnOffOn()" (click)="anim($event)">
             <img src="assets/images/power.png" alt="" >
           </button>
         </div>
 
         <div class="brightness-wrapper">
-          <button class="on-off" (click)="brightnessUp()">
+          <button class="on-off" (click)="brightnessUp()" (click)="anim($event)">
             <img src="assets/images/brightness-up.png" alt="" >
           </button>
-          <button class="on-off" (click)="brightnessDown()">
+          <button class="on-off" (click)="brightnessDown()" (click)="anim($event)">
             <img src="assets/images/brightness-down.png" alt="">
           </button>
         </div>
        
       </div>
       <div class="bluetooth-wrapper">
-         <button class="bluetooth" (click)="scan()">
+         <button class="bluetooth" (click)="scan()" (click)="anim($event)">
           <img src="assets/images/bluetooth.png" alt="">
           </button>
-          <button class="bluetooth" *ngIf="selectedDevice" (click)="disconnect()">
+          <button class="bluetooth" *ngIf="selectedDevice" (click)="disconnect()" (click)="anim($event)">
             <img src="assets/images/disconnect.png" alt="">
           </button>
       </div>
